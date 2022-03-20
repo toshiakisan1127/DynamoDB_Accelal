@@ -6,9 +6,11 @@ import json
 import boto3
 
 from datetime import datetime
+from aws_xray_sdk.core import patch_all
 
 logger = logging.getLogger('lambda_logger')
 logger.setLevel(logging.INFO)
+patch_all()
 
 
 def stop_watch(func):
