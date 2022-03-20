@@ -1,16 +1,21 @@
 from functools import wraps
+from operator import imod
 import time
 import pytz
 import logging
 import json
 import boto3
+import os
 
 from datetime import datetime
 from aws_xray_sdk.core import patch_all
+import amazondax
 
 logger = logging.getLogger('lambda_logger')
 logger.setLevel(logging.INFO)
 patch_all()
+
+DAX_URL = os.getenv("DAX_URL")
 
 
 def stop_watch(func):
@@ -85,7 +90,8 @@ def lambda_handler(event: dict, context):
 class DynamodbClient:
 
     def __init__(self):
-        self.client = boto3.client("dynamodb")
+        # self.client = boto3.client("dynamodb")
+        self.client = amazondax.AmazonDaxClient(endpoint_url=DAX_URL)
 
     def put_item(self, table_name: str, item: dict):
         dynamodb_item = self._dict_to_dynamodb_item_for_dax_test_table(item)

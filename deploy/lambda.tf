@@ -70,9 +70,17 @@ resource "aws_lambda_function" "test_lambda" {
 
   runtime = "python3.8"
 
+  environment {
+    variables = {
+      "DAX_URL" = aws_dax_cluster.test_dax_cluster.configuration_endpoint
+    }
+  }
+
   tracing_config {
     mode = "Active"
   }
+
+  timeout = 10
 }
 
 resource "aws_cloudwatch_log_group" "cloudwatch_logs" {
@@ -121,4 +129,26 @@ resource "aws_iam_policy" "dynamodb_full_access_policy" {
 resource "aws_iam_role_policy_attachment" "aws_dynamodb_full_access" {
   role       = aws_iam_role.iam_for_lambda.name
   policy_arn = aws_iam_policy.dynamodb_full_access_policy.arn
+}
+
+data "aws_iam_policy_document" "dax_full_access_policy_document" {
+  statement {
+    actions = [
+      "dax:*"
+    ]
+    resources = [
+      aws_dax_cluster.test_dax_cluster.arn
+    ]
+    effect = "Allow"
+  }
+}
+
+resource "aws_iam_policy" "dax_full_access_policy" {
+  name   = "dax_full_access_policy"
+  policy = data.aws_iam_policy_document.dax_full_access_policy_document.json
+}
+
+resource "aws_iam_role_policy_attachment" "aws_dax_full_access" {
+  role       = aws_iam_role.iam_for_lambda.name
+  policy_arn = aws_iam_policy.dax_full_access_policy.arn
 }
