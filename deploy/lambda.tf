@@ -94,11 +94,22 @@ resource "aws_iam_role_policy_attachment" "aws_xray_write_only_access" {
 data "aws_iam_policy_document" "dynamodb_full_access_policy_document" {
   statement {
     actions = [
-      "dynamodb:*"
+      "dynamodb:BatchGet*",
+      "dynamodb:DescribeStream",
+      "dynamodb:DescribeTable",
+      "dynamodb:Get*",
+      "dynamodb:Query",
+      "dynamodb:Scan",
+      "dynamodb:BatchWrite*",
+      "dynamodb:CreateTable",
+      "dynamodb:Delete*",
+      "dynamodb:Update*",
+      "dynamodb:PutItem"
     ]
     resources = [
       aws_dynamodb_table.test_dynamodb_table.arn
     ]
+    effect = "Allow"
   }
 }
 
