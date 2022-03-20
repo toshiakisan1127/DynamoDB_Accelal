@@ -6,7 +6,7 @@ terraform {
     }
   }
   backend "s3" {
-    bucket         = "catapp-terraform-state-storage"
+    bucket         = "dax-test-for-sasaki"
     key            = "terraform.tfstate"
     region         = "ap-northeast-1"
     dynamodb_table = "terraform-state-lock"

@@ -1,5 +1,5 @@
 resource "aws_s3_bucket" "terraform-state-storage" {
-  bucket = "catapp-terraform-state-storage"
+  bucket = "dax-test-for-sasaki"
   acl    = "private"
 
   versioning {

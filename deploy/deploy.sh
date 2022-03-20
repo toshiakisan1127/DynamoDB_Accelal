@@ -14,4 +14,4 @@ pip install -r ./../src/requirements.txt -t ./$BUILD_LAMBDA_MODULE_DIR
 
 # deploy lambda
 terraform init
-terraform apply --auto-approve
+terraform apply --auto-approve -lock=false

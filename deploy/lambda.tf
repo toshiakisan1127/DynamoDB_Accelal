@@ -89,3 +89,25 @@ resource "aws_iam_role_policy_attachment" "aws_xray_write_only_access" {
   role       = aws_iam_role.iam_for_lambda.name
   policy_arn = "arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess"
 }
+
+# dynamodbへのフルアクセス
+data "aws_iam_policy_document" "dynamodb_full_access_policy_document" {
+  statement {
+    actions = [
+      "dynamodb:*"
+    ]
+    resources = [
+      aws_dynamodb_table.test_dynamodb_table.arn
+    ]
+  }
+}
+
+resource "aws_iam_policy" "dynamodb_full_access_policy" {
+  name   = "dynamodb_full_access_policy"
+  policy = data.aws_iam_policy_document.dynamodb_full_access_policy_document.json
+}
+
+resource "aws_iam_role_policy_attachment" "aws_dynamodb_full_access" {
+  role       = aws_iam_role.iam_for_lambda.name
+  policy_arn = aws_iam_policy.dynamodb_full_access_policy.arn
+}
