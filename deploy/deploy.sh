@@ -1,6 +1,10 @@
 # bash
 BUILD_LAMBDA_MODULE_DIR=package
 
+if [ -d ./$BUILD_LAMBDA_MODULE_DIR ]; then
+    rm -rf ./$BUILD_LAMBDA_MODULE_DIR
+fi
+
 # Recreate build directory
 mkdir -p $BUILD_LAMBDA_MODULE_DIR
 
@@ -11,7 +15,6 @@ cp -r ./../src/ $BUILD_LAMBDA_MODULE_DIR/
 # Pack python libraries
 echo "Pack python libraries"
 pip install -r ./../src/requirements.txt -t ./$BUILD_LAMBDA_MODULE_DIR
-
 # deploy lambda
 terraform init
 terraform apply --auto-approve -lock=false
